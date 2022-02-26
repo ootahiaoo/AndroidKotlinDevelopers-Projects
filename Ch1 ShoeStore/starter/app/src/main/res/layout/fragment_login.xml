@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.LoginFragment">
+
+    <!-- Use ConstraintLayout to avoid a nested LinearLayout with the buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/large_padding">
+
+        <TextView
+            android:id="@+id/email_label_textview"
+            style="@style/TextViewStyle.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/name_edittext"
+            android:text="@string/email_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/name_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large_padding"
+            android:autofillHints="emailAddress"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_label_textview" />
+
+        <TextView
+            android:id="@+id/password_label_textview"
+            style="@style/TextViewStyle.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/password_edittext"
+            android:text="@string/password_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_edittext" />
+
+        <EditText
+            android:id="@+id/password_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large_padding"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_label_textview" />
+
+        <Button
+            android:id="@+id/register_button"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="@dimen/very_large_padding"
+            android:text="@string/register_label"
+            app:layout_constraintEnd_toStartOf="@+id/login_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_edittext" />
+
+        <Button
+            android:id="@+id/login_button"
+            style="@style/ButtonStyle"
+            android:text="@string/login_label"
+            app:layout_constraintBottom_toBottomOf="@+id/register_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/register_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

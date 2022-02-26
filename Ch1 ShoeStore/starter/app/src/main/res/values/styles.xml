@@ -6,14 +6,44 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@null</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
+    </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TextViewStyle">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="android:layout_margin">@dimen/large_padding</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="TextViewStyle.Title">
+        <item name="android:textSize">@dimen/large_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextViewStyle.Label">
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/accessibility_min_size</item>
+        <item name="android:minWidth">@dimen/accessibility_min_size</item>
+        <item name="android:padding">@dimen/large_padding</item>
+        <item name="android:backgroundTint">?colorPrimary</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+    </style>
 </resources>

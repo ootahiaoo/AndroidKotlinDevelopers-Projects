@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">ShoeStore</string>
+    <string name="fragment_login">Login</string>
+    <string name="fragment_welcome">Welcome</string>
+    <string name="fragment_instruction">Tutorial</string>
+    <string name="fragment_shoe_list">Shoe List</string>
+    <string name="fragment_shoe_detail">Add a pair of shoes</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="register_label">Register</string>
+    <string name="login_label">Login</string>
+    <string name="fab_add_shoes_label">Add shoes</string>
+    <string name="menu_log_out">Log out</string>
+    <string name="welcome_title">Hello there!</string>
+    <string name="welcome_message">Thank you for using ShoeStore.</string>
+    <string name="tutorial_label">Tutorial</string>
+    <string name="instruction_title">How to</string>
+    <string name="instruction_message">You will see a list of shoes. \nFeel free to add a new
+        pair to the list with the button on the bottom right.</string>
+    <string name="shoe_list_label">Shoe list</string>
+    <string name="shoe_name_label">Shoe Name</string>
+    <string name="company_label">Company</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="shoe_size">Shoe Size</string>
+    <string name="description">Description</string>
+    <string name="error_empty_name">Please enter at least a name</string>
 </resources>

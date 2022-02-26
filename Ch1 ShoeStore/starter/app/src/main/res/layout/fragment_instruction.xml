@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.InstructionFragment">
+
+    <!-- Use LinearLayout because this is a simple layout with just 3 views -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/large_padding">
+
+        <TextView
+            android:id="@+id/title_textview"
+            style="@style/TextViewStyle.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instruction_title" />
+
+        <TextView
+            android:id="@+id/message_textview"
+            style="@style/TextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/instruction_message" />
+
+        <Button
+            android:id="@+id/shoe_list_button"
+            style="@style/ButtonStyle"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/large_padding"
+            android:text="@string/shoe_list_label" />
+
+    </LinearLayout>
+</layout>
