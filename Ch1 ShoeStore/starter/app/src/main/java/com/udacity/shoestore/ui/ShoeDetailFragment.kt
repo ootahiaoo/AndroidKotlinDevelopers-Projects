@@ -27,7 +27,7 @@ class ShoeDetailFragment : Fragment() {
             R.layout.fragment_shoe_detail, container, false
         )
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.shoeName.observe(viewLifecycleOwner, Observer {
             binding.nameEdittext.text
@@ -36,9 +36,7 @@ class ShoeDetailFragment : Fragment() {
         // Used by both the Cancel and Save buttons
         viewModel.eventReturnToList.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                NavHostFragment.findNavController(this).navigate(
-                    ShoeDetailFragmentDirections.actionShoeDetailFragmentToShoeListFragment()
-                )
+                NavHostFragment.findNavController(this).navigateUp()
                 viewModel.onReturnToListComplete()
             }
         })

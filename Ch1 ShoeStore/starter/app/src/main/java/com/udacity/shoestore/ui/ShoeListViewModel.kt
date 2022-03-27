@@ -24,6 +24,10 @@ class ShoeListViewModel : ViewModel() {
     val shoeSize = MutableLiveData<String>("")
 
     val shoeDescription = MutableLiveData<String>("")
+    //TODO: implement form validation with Flow
+    // https://levelup.gitconnected.com/using-flows-for-form-validation-in-android-79016b00c079
+    // https://proandroiddev.com/should-we-choose-kotlins-stateflow-or-sharedflow-to-substitute-for-android-s-livedata-2d69f2bd6fa5
+    // https://blog.mindorks.com/a-complete-guide-to-learn-kotlin-for-android-development-b1e5d23cc2d8
 
     private val _eventReturnToList = MutableLiveData<Boolean>(false)
     val eventReturnToList: LiveData<Boolean>
