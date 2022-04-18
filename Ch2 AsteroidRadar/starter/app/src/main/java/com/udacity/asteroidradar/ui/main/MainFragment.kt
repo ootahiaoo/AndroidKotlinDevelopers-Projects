@@ -31,11 +31,12 @@ class MainFragment : Fragment() {
             this.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
         })
         binding.asteroidRecycler.adapter = adapter
-
+        // TODO: implement SwipeRefreshLayout
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // TODO: implement other filtering options
         inflater.inflate(R.menu.main_overflow_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

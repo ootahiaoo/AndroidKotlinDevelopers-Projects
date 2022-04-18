@@ -38,6 +38,7 @@
                     app:pictureOfTheDay="@{viewModel.imageOfTheDay}"
                     app:srcCompat="@drawable/placeholder_picture_of_day" />
 
+                <!-- TODO: modify title to include the picture description too -->
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
