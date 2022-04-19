@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="LoadingButton">
-<!--   TODO: create custom attributes for the view-->
+        <attr name="idleBackgroundColor" format="color" />
+        <attr name="loadingBackgroundColor" format="color" />
+        <attr name="progressCircleColor" format="color" />
+        <attr name="progressCircleDiameter" format="dimension" />
+        <attr name="progressCirclePadding" format="dimension" />
+        <attr name="textColor" format="color" />
     </declare-styleable>
 </resources>
