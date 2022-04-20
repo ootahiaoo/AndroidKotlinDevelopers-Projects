@@ -7,12 +7,18 @@
     <string name="load_app_radio_button">LoadApp - Current repository by Udacity</string>
     <string name="retrofit_radio_button">Retrofit - Type-safe HTTP client for Android and Java by Square, Inc</string>
     <string name="no_button_selected_toast">Please select the file to download</string>
+    <string name="download_finished_toast">Done!</string>
 
     <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
     <string name="notification_description">The Project 3 repository is downloaded</string>
     <string name="notification_button">See changes</string>
+    <string name="notification_channel_name">Download result listener</string>
 
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="download_status_success">Successful</string>
+    <string name="download_status_failure">Failed</string>
+    <string name="status_label">Status:</string>
+    <string name="file_name_label">File name:</string>
 </resources>

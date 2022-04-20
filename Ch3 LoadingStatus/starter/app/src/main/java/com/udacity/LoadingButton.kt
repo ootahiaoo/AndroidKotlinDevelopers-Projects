@@ -43,7 +43,7 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Clicked -> {
                 currentText = context.getString(R.string.button_loading)
                 startAnimation()
-                setNewButtonState(new)
+                changeButtonState()
             }
             ButtonState.Loading -> {}
             ButtonState.Completed -> {
@@ -53,12 +53,13 @@ class LoadingButton @JvmOverloads constructor(
         }
     }
 
-    private fun setNewButtonState(oldState: ButtonState) {
-        buttonState = when (oldState) {
+    fun changeButtonState() {
+        buttonState = when (buttonState) {
             ButtonState.Clicked -> ButtonState.Loading
             ButtonState.Loading -> ButtonState.Completed
             ButtonState.Completed -> ButtonState.Clicked
         }
+        invalidate()
     }
     //endregion
 
@@ -78,12 +79,6 @@ class LoadingButton @JvmOverloads constructor(
         }
 
         buttonState = ButtonState.Completed
-    }
-
-    override fun performClick(): Boolean {
-        setNewButtonState(buttonState)
-        invalidate()
-        return super.performClick()
     }
 
     //region Drawing

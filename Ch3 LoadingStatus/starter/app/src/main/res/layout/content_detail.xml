@@ -4,8 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DetailActivity"
     tools:showIn="@layout/activity_detail">
+
+    <TextView
+        android:id="@+id/file_name_label_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/file_name_textview"
+        android:padding="8dp"
+        android:text="@string/file_name_label"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/file_name_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/file_name_label_textview"
+        tools:text="@string/glide_radio_button" />
+
+    <TextView
+        android:id="@+id/status_label_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/status_textview"
+        android:padding="8dp"
+        android:text="@string/status_label"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/barrier" />
+
+    <TextView
+        android:id="@+id/status_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textColor="?colorPrimaryDark"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/barrier"
+        tools:text="Success" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="file_name_label_textview, file_name_textview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

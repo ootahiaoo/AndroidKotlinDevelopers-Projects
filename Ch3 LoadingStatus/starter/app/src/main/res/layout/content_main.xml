@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:padding="8dp"
+            android:textSize="@dimen/default_text_size"
             android:text="@string/glide_radio_button" />
 
         <RadioButton
@@ -34,6 +35,7 @@
             android:layout_marginTop="12dp"
             android:minHeight="48dp"
             android:padding="8dp"
+            android:textSize="@dimen/default_text_size"
             android:text="@string/load_app_radio_button" />
 
         <RadioButton
@@ -43,6 +45,7 @@
             android:layout_marginTop="12dp"
             android:minHeight="48dp"
             android:padding="8dp"
+            android:textSize="@dimen/default_text_size"
             android:text="@string/retrofit_radio_button" />
     </RadioGroup>
 
