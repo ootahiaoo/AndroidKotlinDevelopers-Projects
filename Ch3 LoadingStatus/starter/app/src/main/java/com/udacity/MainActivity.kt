@@ -34,11 +34,20 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         initializeNotificationManager()
-        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         custom_button.setOnClickListener {
             getRadioButtonCurrentChoice()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
     }
 
     private fun getRadioButtonCurrentChoice() {

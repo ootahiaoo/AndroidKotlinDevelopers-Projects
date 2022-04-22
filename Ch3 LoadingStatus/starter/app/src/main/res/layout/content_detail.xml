@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    app:layoutDescription="@xml/detail_transition"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DetailActivity"
     tools:showIn="@layout/activity_detail">
@@ -16,10 +19,7 @@
         android:labelFor="@id/file_name_textview"
         android:padding="8dp"
         android:text="@string/file_name_label"
-        android:textSize="@dimen/default_text_size"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="@dimen/default_text_size" />
 
     <TextView
         android:id="@+id/file_name_textview"
@@ -28,9 +28,6 @@
         android:padding="8dp"
         android:textColor="?colorPrimaryDark"
         android:textSize="@dimen/default_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/file_name_label_textview"
         tools:text="@string/glide_radio_button" />
 
     <TextView
@@ -40,10 +37,7 @@
         android:labelFor="@id/status_textview"
         android:padding="8dp"
         android:text="@string/status_label"
-        android:textSize="@dimen/default_text_size"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/barrier" />
+        android:textSize="@dimen/default_text_size" />
 
     <TextView
         android:id="@+id/status_textview"
@@ -52,10 +46,7 @@
         android:padding="8dp"
         android:textColor="?colorPrimaryDark"
         android:textSize="@dimen/default_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/barrier"
-        tools:text="Success" />
+        tools:text="@string/download_status_success" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -71,4 +62,13 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="file_name_label_textview, file_name_textview" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/return_home_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?colorAccent"
+        android:minHeight="48dp"
+        android:text="@string/return_home_button"
+        android:textColor="@color/white" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

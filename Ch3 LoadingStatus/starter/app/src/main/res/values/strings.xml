@@ -17,8 +17,9 @@
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="download_status_success">Successful</string>
-    <string name="download_status_failure">Failed</string>
+    <string name="download_status_success">Success</string>
+    <string name="download_status_failure">Fail</string>
     <string name="status_label">Status:</string>
     <string name="file_name_label">File name:</string>
+    <string name="return_home_button">OK</string>
 </resources>
