@@ -31,7 +31,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         const val REQUEST_LOCATION_PERMISSION = 1
     }
 
-    val TAG = SelectLocationFragment::class.java.simpleName
+    private val TAG = "SelectLocationFragment"
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
