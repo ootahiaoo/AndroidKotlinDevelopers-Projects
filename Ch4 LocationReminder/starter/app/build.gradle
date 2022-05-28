@@ -4,10 +4,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.udacity.project4"
@@ -63,7 +64,6 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
@@ -78,8 +78,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     //Koin
-    implementation "org.koin:koin-android:$koinVersion"
-    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+    implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-androidx-viewmodel:$koinVersion"
 
 
     // Dependencies for local unit tests
@@ -113,12 +113,14 @@ dependencies {
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     implementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
-    implementation "androidx.fragment:fragment:$fragmentVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
-    androidTestImplementation('org.koin:koin-test:2.0.1') { exclude group: 'org.mockito' }
+    androidTestImplementation('io.insert-koin:koin-test:2.0.1') { exclude group: 'org.mockito' }
 
-    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
 
     //Maps & Geofencing
     implementation "com.google.android.gms:play-services-location:$playServicesVersion"
