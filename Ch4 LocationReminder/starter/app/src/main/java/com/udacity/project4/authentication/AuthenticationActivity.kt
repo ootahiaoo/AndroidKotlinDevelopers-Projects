@@ -67,6 +67,7 @@ class AuthenticationActivity : AppCompatActivity() {
             .setAvailableProviders(providers)
             // Since the output image sample only changed the background and not the buttons,
             // instead of using AuthMethodPickerLayout, just customize the theme and logo
+            // https://stackoverflow.com/a/47965570
             .setTheme(R.style.LoginCustomTheme)
             .setLogo(R.drawable.map)
             .build()
