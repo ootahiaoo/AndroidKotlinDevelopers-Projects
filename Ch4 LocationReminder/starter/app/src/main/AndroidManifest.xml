@@ -33,7 +33,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".locationreminders.ReminderDescriptionActivity"></activity>
+        <activity
+            android:name=".locationreminders.reminderdescription.ReminderDescriptionActivity"
+            android:parentActivityName=".locationreminders.RemindersActivity" />
 
         <!--
              TODO: Before you run your application, you need a Google Maps API key.

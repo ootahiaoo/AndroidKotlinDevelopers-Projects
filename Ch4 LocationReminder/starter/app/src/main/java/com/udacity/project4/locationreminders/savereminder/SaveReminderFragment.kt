@@ -1,41 +1,31 @@
 package com.udacity.project4.locationreminders.savereminder
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentSender
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
-import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
+import com.udacity.project4.locationreminders.data.ReminderDataItem
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
-import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
-import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
+import com.udacity.project4.utils.*
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
-const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 43
-const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 44
-const val REQUEST_TURN_DEVICE_LOCATION_ON = 45
-const val LOCATION_PERMISSION_INDEX = 0
-const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 const val ACTION_GEOFENCE_EVENT =
     "SaveReminderFragment.action.ACTION_GEOFENCE_EVENT"
 
@@ -46,10 +36,6 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var binding: FragmentSaveReminderBinding
     private lateinit var reminder: ReminderDataItem
     private val TAG = "SaveReminderFragment"
-
-    // The location permission process is slightly different depending on the SDK version
-    private val runningQOrLater = android.os.Build.VERSION.SDK_INT >=
-            android.os.Build.VERSION_CODES.Q
 
     private lateinit var geofencingClient: GeofencingClient
     private val geofenceRadiusInMeter = 100f
@@ -71,7 +57,7 @@ class SaveReminderFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.selectLocation.setOnClickListener {
             // Navigate to another fragment to get the user location
             _viewModel.navigationCommand.value =
@@ -104,10 +90,33 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     private fun checkPermissionsBeforeStartingGeofencing() {
-        if (isForegroundAndBackgroundLocationPermissionApproved()) {
+        if (isLocationPermissionApproved(requireActivity())) {
             checkDeviceLocationSettingsAndStartGeofence()
         } else {
-            requestForegroundAndBackgroundLocationPermissions()
+            requestLocationPermissions(requireActivity())
+        }
+    }
+
+    /**
+     * Handle the background/foreground location permission result
+     * The result for the device location setting change request is handled with onActivityResult()
+     *
+     * Callback result from RemindersActtivity's onRequestPermissionsResult()
+     */
+    fun checkPermissionResult(isMissingPermission: Boolean) {
+        if (isMissingPermission) {
+            // A permission is still missing, prompt the user to change the location setting
+            Snackbar.make(
+                binding.root,
+                R.string.permission_denied_explanation,
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction(R.string.settings) {
+                    requireContext().openAppSettings()
+                }.show()
+        } else {
+            // All permissions are already granted
+            checkDeviceLocationSettingsAndStartGeofence()
         }
     }
 
@@ -173,27 +182,12 @@ class SaveReminderFragment : BaseFragment() {
      *  the opportunity to turn on location services within our app.
      */
     private fun checkDeviceLocationSettingsAndStartGeofence(resolve: Boolean = true) {
-        // Request to check the device's location setting current status
-        val locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_LOW_POWER
-        }
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-        val settingsClient = LocationServices.getSettingsClient(requireContext())
-        val locationSettingsResponseTask =
-            settingsClient.checkLocationSettings(builder.build())
+        val locationSettingsResponse = requireContext().requestLocationSettingStatus()
 
         // If the location setting is set to OFF, prompt and help the user to turn it ON
-        locationSettingsResponseTask.addOnFailureListener { exception ->
+        locationSettingsResponse.addOnFailureListener { exception ->
             if (exception is ResolvableApiException && resolve) {
-                try {
-                    // Prompt user to turn on location services
-                    exception.startResolutionForResult(
-                        requireActivity(),
-                        REQUEST_TURN_DEVICE_LOCATION_ON
-                    )
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    Log.d(TAG, getString(R.string.location_setting_error, sendEx.message))
-                }
+                exception.requestToTurnOnLocationSetting(requireActivity())
             } else {
                 // Explain that the location setting needs to be turned ON
                 // If the SnackBar is tapped, starts the permission process again
@@ -208,7 +202,7 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         // The location setting is already ON, proceed with the geofencing
-        locationSettingsResponseTask.addOnCompleteListener {
+        locationSettingsResponse.addOnCompleteListener {
             if (it.isSuccessful) {
                 addGeofence()
             }
@@ -219,116 +213,17 @@ class SaveReminderFragment : BaseFragment() {
      * When we get the result from asking the user to turn on device location,
      * call checkDeviceLocationSettingsAndStartGeofence() again to make sure it's actually on,
      * but don't resolve the check (in order to keep the user from seeing an endless loop)
+     *
+     * Callback result from RemindersActivity's onActivityResult()
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_TURN_DEVICE_LOCATION_ON) {
-            // If the user denied the device location permission, ask again
-            checkDeviceLocationSettingsAndStartGeofence(false)
-        }
+    fun checkDeviceLocationRequestResult() {
+        checkDeviceLocationSettingsAndStartGeofence(false)
     }
     //endregion
-
-    //region Permissions
-    /**
-     * In all cases, we need to have the location permission
-     * On Android 10+ (Q) we need to have the background permission as well
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        Log.d(TAG, "onRequestPermissionResult")
-
-        val requestInterrupted = grantResults.isEmpty()
-        val missingOneLocationPermission =
-            grantResults[LOCATION_PERMISSION_INDEX] == PackageManager.PERMISSION_DENIED
-
-        // Only when running on API 29+
-        val backgroundLocationPermissionDenied = (requestCode ==
-                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE &&
-                grantResults[BACKGROUND_LOCATION_PERMISSION_INDEX] ==
-                PackageManager.PERMISSION_DENIED)
-
-        if (requestInterrupted ||
-            missingOneLocationPermission ||
-            backgroundLocationPermissionDenied
-        ) {
-            // A permission is still missing, prompt the user to change the location setting
-            Snackbar.make(
-                binding.root,
-                R.string.permission_denied_explanation,
-                Snackbar.LENGTH_INDEFINITE
-            )
-                .setAction(R.string.settings) {
-                    // Open the device settings
-                    startActivity(Intent().apply {
-                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    })
-                }.show()
-        } else {
-            // All permissions are already granted
-            checkDeviceLocationSettingsAndStartGeofence()
-        }
-    }
-
-    /**
-     *  Determines whether the app has the appropriate permissions across Android 10+ and all other
-     *  Android versions.
-     */
-    @TargetApi(29)
-    private fun isForegroundAndBackgroundLocationPermissionApproved(): Boolean {
-        val foregroundLocationApproved = (
-                PackageManager.PERMISSION_GRANTED ==
-                        ActivityCompat.checkSelfPermission(
-                            requireContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        ))
-        val backgroundPermissionApproved =
-            if (runningQOrLater) {
-                PackageManager.PERMISSION_GRANTED ==
-                        ActivityCompat.checkSelfPermission(
-                            requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                        )
-            } else {
-                true
-            }
-        return foregroundLocationApproved && backgroundPermissionApproved
-    }
-
-    /**
-     *  Requests ACCESS_FINE_LOCATION and on Android 10+ (Q) ACCESS_BACKGROUND_LOCATION.
-     */
-    @TargetApi(29)
-    private fun requestForegroundAndBackgroundLocationPermissions() {
-        // Permissions are already granted
-        if (isForegroundAndBackgroundLocationPermissionApproved()) return
-
-        var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        val resultCode = if (runningQOrLater) {
-            permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
-        } else {
-            REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
-        }
-
-        Log.d(TAG, "Request foreground only location permission")
-
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            permissionsArray,
-            resultCode
-        )
-    }
-    //endregion
-
 
     override fun onDestroy() {
         super.onDestroy()
-        //make sure to clear the view model after destroy, as it's a single view model.
+        // Make sure to clear the view model after destroy, as it's a single view model.
         _viewModel.onClear()
     }
 }

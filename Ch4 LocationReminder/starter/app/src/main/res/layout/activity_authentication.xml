@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorAccent"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/login"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

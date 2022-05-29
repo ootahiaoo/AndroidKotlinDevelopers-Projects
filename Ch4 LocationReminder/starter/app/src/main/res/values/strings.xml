@@ -27,13 +27,19 @@
     <string name="content_text">Location Reminder</string>
     <string name="select_title">Please select title</string>
     <string name="select_location">Please select location</string>
-    <string name="geofences_not_added">Problem in adding geofences.</string>
     <string name="welcome">Welcome</string>
-    <string name="err_enter_title">Please enter title</string>
-    <string name="err_select_location">Please select location</string>
+    <string name="delete">Delete</string>
+    <string name="reminder_description_title">Title: %1$s</string>
+    <string name="reminder_description_description">Description: %1$s</string>
+    <string name="reminder_description_location">Location: %1$s</string>
 
     <!-- Error strings -->
+    <string name="geofences_not_added">Problem in adding geofences.</string>
+    <string name="geofence_not_removed">Problem removing the geofence.</string>
+    <string name="err_enter_title">Please enter title</string>
+    <string name="err_select_location">Please select location</string>
     <string name="location_required_error">Location services must be enabled to use the app</string>
+    <string name="location_required_for_map">Location services must be enabled to zoom to your current location</string>
     <string name="permission_denied_explanation">You need to grant location permission in order to select the location.</string>
     <string name="location_setting_error">Error getting location settings resolution:%1$s</string>
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
