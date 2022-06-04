@@ -86,7 +86,7 @@ class RemindersListViewModelTest {
     @Test
     fun loadReminders_checkLoading() {
         // Pause before coroutine so we can verify initial value
-        mainCoroutineRule.pauseDispatcher()
+        mainCoroutineRule.dispatcher.pauseDispatcher()
 
         // Load the reminders
         remindersListViewModel.loadReminders()
@@ -95,7 +95,7 @@ class RemindersListViewModelTest {
         assertThat(remindersListViewModel.showLoading.getOrAwaitValue(), `is`(true))
 
         // Execute pending coroutines
-        mainCoroutineRule.resumeDispatcher()
+        mainCoroutineRule.dispatcher.resumeDispatcher()
 
         // The progress indicator is now hidden
         assertThat(remindersListViewModel.showLoading.getOrAwaitValue(), `is`(false))

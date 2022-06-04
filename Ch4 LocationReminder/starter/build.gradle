@@ -50,7 +50,7 @@ ext {
     mockitoVersion = '2.8.9'
     constraintVersion = '2.0.0-rc1'
     dexMakerVersion = '2.28.1'
-    coroutinesVersion = '1.2.1'
+    coroutinesVersion = '1.6.2'
     roomVersion = '2.4.2'
     koinVersion = '2.0.1'
     truthVersion = '0.44'

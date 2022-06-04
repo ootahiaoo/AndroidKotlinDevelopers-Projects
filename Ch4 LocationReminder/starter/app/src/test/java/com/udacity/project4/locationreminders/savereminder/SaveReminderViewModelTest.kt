@@ -63,7 +63,7 @@ class SaveReminderViewModelTest {
     }
 
     @Test
-    fun onClear_setReminderLiveDataToNull() {
+    fun onClear_reminderLiveDataSetToNull() {
         saveReminderViewModel.onClear()
 
         assertThat(
@@ -93,7 +93,7 @@ class SaveReminderViewModelTest {
     }
 
     @Test
-    fun savePOI_changeReminderLiveData() {
+    fun savePOI_reminderLiveDataChanged() {
         val poi = PointOfInterest(LatLng(1.23, 1.23), "placeId", "name")
 
         saveReminderViewModel.savePOI(poi)
