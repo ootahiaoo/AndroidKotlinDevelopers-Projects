@@ -1,6 +1,7 @@
 package com.udacity.project4.locationreminders.data
 
 import android.os.Parcelable
+import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 import java.util.*
@@ -16,4 +17,16 @@ data class ReminderDataItem(
     var latitude: Double?,
     var longitude: Double?,
     val id: String = UUID.randomUUID().toString()
-) : Parcelable
+) : Parcelable {
+
+    fun toDTO(): ReminderDTO {
+        return ReminderDTO(
+            title = title,
+            description = description,
+            location = location,
+            latitude = latitude,
+            longitude = longitude,
+            id = id
+        )
+    }
+}
