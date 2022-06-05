@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.ReminderDataItem
 import com.udacity.project4.locationreminders.data.dto.Result
 import com.udacity.project4.locationreminders.getOrAwaitValue
+import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel.SimpleLocation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
@@ -79,10 +78,6 @@ class SaveReminderViewModelTest {
             `is`(nullValue())
         )
         assertThat(
-            saveReminderViewModel.selectedPOI.getOrAwaitValue(),
-            `is`(nullValue())
-        )
-        assertThat(
             saveReminderViewModel.latitude.getOrAwaitValue(),
             `is`(nullValue())
         )
@@ -93,26 +88,22 @@ class SaveReminderViewModelTest {
     }
 
     @Test
-    fun savePOI_reminderLiveDataChanged() {
-        val poi = PointOfInterest(LatLng(1.23, 1.23), "placeId", "name")
+    fun saveLocation_reminderLiveDataChanged() {
+        val location = SimpleLocation("name", 1.23, 1.23)
 
-        saveReminderViewModel.savePOI(poi)
+        saveReminderViewModel.saveLocation(location)
 
-        assertThat(
-            saveReminderViewModel.selectedPOI.getOrAwaitValue(),
-            `is`(poi)
-        )
         assertThat(
             saveReminderViewModel.reminderSelectedLocationStr.getOrAwaitValue(),
-            `is`(poi.name)
+            `is`(location.locationString)
         )
         assertThat(
             saveReminderViewModel.latitude.getOrAwaitValue(),
-            `is`(poi.latLng.latitude)
+            `is`(location.latitude)
         )
         assertThat(
             saveReminderViewModel.longitude.getOrAwaitValue(),
-            `is`(poi.latLng.longitude)
+            `is`(location.longitude)
         )
     }
 

@@ -21,8 +21,10 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel.SimpleLocation
 import com.udacity.project4.utils.*
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
@@ -50,10 +52,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     // The location the user selected displayed as a marker on the map
     // Only one can be selected at a time
-    private var poiMarker: Marker? = null
+    private var displayedMarker: Marker? = null
 
     // Currently selected but not saved yet
-    private var currentlySelectedPoi: PointOfInterest? = null
+    private var currentlySelectedLocation: SimpleLocation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -85,9 +87,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
-        currentlySelectedPoi?.let {
-            _viewModel.savePOI(it)
+        currentlySelectedLocation?.let {
+            _viewModel.saveLocation(it)
         }
+
         findNavController().popBackStack()
     }
 
@@ -98,6 +101,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         // Zoom to the user's location if permission is granted
         checkPermissionsToUserLocation()
         setPoiClick(map)
+        setMapLongClick(map)
         setMapStyle(map)
 
         Toast.makeText(requireContext(), R.string.select_poi, Toast.LENGTH_LONG).show()
@@ -115,15 +119,46 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
      */
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
-            poiMarker?.remove()
+            displayedMarker?.remove()
 
             val marker = MarkerOptions()
                 .position(poi.latLng)
                 .title(poi.name)
 
-            poiMarker = map.addMarker(marker)
-            poiMarker?.showInfoWindow()
-            currentlySelectedPoi = poi
+            displayedMarker = map.addMarker(marker)
+            displayedMarker?.showInfoWindow()
+
+            currentlySelectedLocation = SimpleLocation(
+                locationString = poi.name,
+                latitude = poi.latLng.latitude,
+                longitude = poi.latLng.longitude)
+        }
+    }
+
+    private fun setMapLongClick(map: GoogleMap) {
+        map.setOnMapLongClickListener { latLng ->
+            displayedMarker?.remove()
+
+            val snippet = String.format(
+                Locale.getDefault(),
+                getString(R.string.lat_long_snippet),
+                latLng.latitude,
+                latLng.longitude
+            )
+
+            val marker = MarkerOptions()
+                .position(latLng)
+                .title(getString(R.string.dropped_pin))
+                .snippet(snippet)
+
+            displayedMarker = map.addMarker(marker)
+            displayedMarker?.showInfoWindow()
+
+            currentlySelectedLocation = SimpleLocation(
+                locationString = snippet,
+                latitude = latLng.latitude,
+                longitude = latLng.longitude
+            )
         }
     }
 

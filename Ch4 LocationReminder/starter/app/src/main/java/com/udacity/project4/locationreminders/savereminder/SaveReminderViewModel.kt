@@ -3,13 +3,12 @@ package com.udacity.project4.locationreminders.savereminder
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.base.NavigationCommand
+import com.udacity.project4.locationreminders.data.ReminderDataItem
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
-import com.udacity.project4.locationreminders.data.ReminderDataItem
 import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
@@ -17,7 +16,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val reminderTitle = MutableLiveData<String>()
     val reminderDescription = MutableLiveData<String>()
     val reminderSelectedLocationStr = MutableLiveData<String>()
-    val selectedPOI = MutableLiveData<PointOfInterest>()
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
 
@@ -28,16 +26,14 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         reminderTitle.value = null
         reminderDescription.value = null
         reminderSelectedLocationStr.value = null
-        selectedPOI.value = null
         latitude.value = null
         longitude.value = null
     }
 
-    fun savePOI(poi: PointOfInterest) {
-        selectedPOI.postValue(poi)
-        reminderSelectedLocationStr.postValue(poi.name)
-        latitude.postValue(poi.latLng.latitude)
-        longitude.postValue((poi.latLng.longitude))
+    fun saveLocation(location: SimpleLocation) {
+        reminderSelectedLocationStr.postValue(location.locationString)
+        latitude.postValue(location.latitude)
+        longitude.postValue(location.longitude)
     }
 
     /**
@@ -86,4 +82,10 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         }
         return true
     }
+
+    data class SimpleLocation(
+        val locationString: String,
+        val latitude: Double,
+        val longitude: Double
+    )
 }
