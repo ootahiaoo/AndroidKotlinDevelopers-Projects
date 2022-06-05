@@ -46,8 +46,7 @@ import org.koin.test.get
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 // END TO END test to black box test the app
-class RemindersActivityTest :
-    KoinTest {
+class RemindersActivityTest : KoinTest {
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
