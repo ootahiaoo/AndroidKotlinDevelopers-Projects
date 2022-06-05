@@ -15,7 +15,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
@@ -26,7 +29,8 @@ import com.udacity.project4.utils.*
 import org.koin.android.ext.android.inject
 import java.util.*
 
-class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
+class SelectLocationFragment : BaseFragment(), OnMapReadyCallback,
+    GoogleMap.OnMyLocationButtonClickListener {
 
     private val TAG = "SelectLocationFragment"
 
@@ -107,6 +111,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         Toast.makeText(requireContext(), R.string.select_poi, Toast.LENGTH_LONG).show()
     }
 
+    /**
+     * If the user tapped on the MyLocation button, but did not set the location service to ON,
+     * promp them to change the settings on to make sure the button actually zoom
+     * (The default behavior does not display an error/help message)
+     *
+     * https://developers.google.com/maps/documentation/android-sdk/location#the_my_location_layer
+     */
+    override fun onMyLocationButtonClick(): Boolean {
+        checkDeviceLocationSettingsAndZoomToUserLocation()
+        return true
+    }
+
     fun zoomToUserLocation(location: Location) {
         val latLng = LatLng(location.latitude, location.longitude)
         val zoomLevel = 18f
@@ -131,7 +147,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             currentlySelectedLocation = SimpleLocation(
                 locationString = poi.name,
                 latitude = poi.latLng.latitude,
-                longitude = poi.latLng.longitude)
+                longitude = poi.latLng.longitude
+            )
         }
     }
 
@@ -181,17 +198,23 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     /**
      * Get the user's last known location to zoom there on the map
-     * This method is called after getting the location permission and switching the location
-     * setting to ON if necessary
+     * This method is called after getting the location permission, but the location setting
+     * might be OFF
      */
     @SuppressLint("MissingPermission")
     private fun getUserLastKnownLocation() {
+        // Enable the MyLocation button
         map.isMyLocationEnabled = true
+        map.setOnMyLocationButtonClickListener(this)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             // If there is no last known location, request an update
             // (For example, if this was the first time the location setting is set to ON)
             if (location == null) {
+                // This method will be ignored if the location setting is set to OFF
+                // If the user taps on the MyLocation button, the app will help the user to set
+                // the location setting on and come back here to request an update again
                 requestLocationUpdate()
                 return@addOnSuccessListener
             }
@@ -235,9 +258,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     requireContext().openAppSettings()
                 }.show()
         } else {
-            // Check the location setting (if it is OFF, the location won't be displayed even
-            // with permission granted)
-            checkDeviceLocationSettingsAndZoomToUserLocation()
+            getUserLastKnownLocation()
         }
     }
 
